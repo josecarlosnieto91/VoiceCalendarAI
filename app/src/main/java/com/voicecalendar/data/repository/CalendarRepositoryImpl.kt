@@ -23,18 +23,20 @@ class CalendarRepositoryImpl @Inject constructor(
 
     override suspend fun saveEvent(event: CalendarEvent): Result<CalendarEvent> {
         return runCatching {
+            val startMillis = toEpochMillis(event)
+            val endMillis = toEndEpochMillis(event)
+
             val values = ContentValues().apply {
-                put(CalendarContract.Events.DTSTART, toEpochMillis(event))
+                put(CalendarContract.Events.DTSTART, startMillis)
+                put(CalendarContract.Events.DTEND, endMillis)
                 put(CalendarContract.Events.TITLE, event.title)
-                put(CalendarContract.Events.DESCRIPTION, event.description)
+                put(CalendarContract.Events.DESCRIPTION, buildDescription(event))
                 put(CalendarContract.Events.EVENT_LOCATION, event.location)
                 put(CalendarContract.Events.CALENDAR_ID, getPrimaryCalendarId())
                 put(CalendarContract.Events.EVENT_TIMEZONE, ZoneId.systemDefault().id)
 
-                if (event.allDay) put(CalendarContract.Events.ALL_DAY, 1)
-
-                if (event.endTime != null) {
-                    put(CalendarContract.Events.DTEND, toEndEpochMillis(event))
+                if (event.date != null && event.startTime == null) {
+                    put(CalendarContract.Events.ALL_DAY, 1)
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -44,7 +46,12 @@ class CalendarRepositoryImpl @Inject constructor(
 
             val uri = contentResolver.insert(CalendarContract.Events.CONTENT_URI, values)
             val eventId = ContentUris.parseId(uri!!)
-            addReminder(eventId, event.reminderMinutes)
+
+            // Add all smart reminders
+            event.reminders.forEach { minutes ->
+                addReminder(eventId, minutes)
+            }
+
             event.copy(eventId = eventId, calendarId = getPrimaryCalendarId())
         }
     }
@@ -53,19 +60,23 @@ class CalendarRepositoryImpl @Inject constructor(
         return runCatching {
             val values = ContentValues().apply {
                 put(CalendarContract.Events.DTSTART, toEpochMillis(event))
+                put(CalendarContract.Events.DTEND, toEndEpochMillis(event))
                 put(CalendarContract.Events.TITLE, event.title)
-                put(CalendarContract.Events.DESCRIPTION, event.description)
+                put(CalendarContract.Events.DESCRIPTION, buildDescription(event))
                 put(CalendarContract.Events.EVENT_LOCATION, event.location)
                 put(CalendarContract.Events.EVENT_TIMEZONE, ZoneId.systemDefault().id)
-                if (event.endTime != null) {
-                    put(CalendarContract.Events.DTEND, toEndEpochMillis(event))
-                }
             }
+
             val uri = ContentUris.withAppendedId(
                 CalendarContract.Events.CONTENT_URI,
                 event.eventId ?: return@runCatching event
             )
             contentResolver.update(uri, values, null, null)
+
+            // Re-add reminders (clear old + add new)
+            deleteReminders(event.eventId!!)
+            event.reminders.forEach { addReminder(event.eventId!!, it) }
+
             event
         }
     }
@@ -113,6 +124,19 @@ class CalendarRepositoryImpl @Inject constructor(
         ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
         ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED
 
+    private fun buildDescription(event: CalendarEvent): String = buildString {
+        if (event.description.isNotBlank()) appendLine(event.description)
+        appendLine()
+        appendLine("--- VoiceCalendar AI ---")
+        appendLine("Category: ${event.category.displayName}")
+        appendLine("Priority: ${event.priority.displayName}")
+        appendLine("Duration: ${event.durationMinutes} min")
+        if (event.reminders.isNotEmpty()) {
+            append("Reminders: ")
+            append(event.reminders.joinToString(" min, ") { "$it min" })
+        }
+    }
+
     private fun getPrimaryCalendarId(): Long {
         val cursor = contentResolver.query(
             CalendarContract.Calendars.CONTENT_URI,
@@ -131,6 +155,14 @@ class CalendarRepositoryImpl @Inject constructor(
         contentResolver.insert(CalendarContract.Reminders.CONTENT_URI, values)
     }
 
+    private fun deleteReminders(eventId: Long) {
+        contentResolver.delete(
+            CalendarContract.Reminders.CONTENT_URI,
+            "${CalendarContract.Reminders.EVENT_ID} = ?",
+            arrayOf(eventId.toString())
+        )
+    }
+
     private fun toEpochMillis(event: CalendarEvent): Long {
         val date = event.date ?: java.time.LocalDate.now()
         val time = event.startTime ?: java.time.LocalTime.of(9, 0)
@@ -139,7 +171,8 @@ class CalendarRepositoryImpl @Inject constructor(
 
     private fun toEndEpochMillis(event: CalendarEvent): Long {
         val date = event.date ?: java.time.LocalDate.now()
-        val time = event.endTime ?: event.startTime?.plusHours(1) ?: java.time.LocalTime.of(10, 0)
-        return ZonedDateTime.of(date, time, ZoneId.systemDefault()).toEpochSecond() * 1000
+        val time = event.startTime ?: java.time.LocalTime.of(9, 0)
+        val endTime = time.plusMinutes(event.durationMinutes.toLong())
+        return ZonedDateTime.of(date, endTime, ZoneId.systemDefault()).toEpochSecond() * 1000
     }
 }
