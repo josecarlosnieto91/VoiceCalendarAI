@@ -1,42 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">VoiceCalendar AI</string>
-    <string name="mic_button_description">Toca para hablar</string>
+    <string name="mic_description">Toca para iniciar entrada de voz</string>
     <string name="listening">Escuchando…</string>
     <string name="processing">Procesando…</string>
+    <string name="saving">Guardando…</string>
+    <string name="event_saved">¡Evento guardado!</string>
+    <string name="error_occurred">Algo salió mal</string>
+    <string name="upcoming_events">Próximos eventos</string>
+    <string name="settings">Ajustes</string>
     <string name="save_event">Guardar Evento</string>
     <string name="cancel">Cancelar</string>
-    <string name="confirm">Confirmar</string>
-    <string name="edit">Editar</string>
-    <string name="delete">Eliminar</string>
-    <string name="title">Título</string>
-    <string name="description">Descripción</string>
-    <string name="date">Fecha</string>
-    <string name="time">Hora</string>
-    <string name="location">Ubicación</string>
-    <string name="reminder">Recordatorio</string>
-    <string name="no_events">No hay eventos próximos</string>
-    <string name="event_saved">Evento guardado correctamente</string>
-    <string name="event_deleted">Evento eliminado</string>
-    <string name="error_permission_mic">Permiso de micrófono requerido</string>
-    <string name="error_permission_calendar">Permiso de calendario requerido</string>
-    <string name="error_speech_not_available">Reconocimiento de voz no disponible</string>
-    <string name="error_llm_unavailable">Servicio de IA no disponible. Verifica tu conexión.</string>
-    <string name="error_parse_event">No se pudo entender el evento. Intenta de nuevo.</string>
-    <string name="settings">Ajustes</string>
-    <string name="settings_llm_provider">Proveedor de IA</string>
-    <string name="settings_llm_api_key">Clave API</string>
-    <string name="settings_llm_model">Modelo</string>
-    <string name="settings_llm_endpoint">URL del endpoint</string>
-    <string name="settings_language">Idioma</string>
-    <string name="settings_theme">Tema</string>
-    <string name="settings_theme_system">Sistema</string>
-    <string name="settings_theme_light">Claro</string>
-    <string name="settings_theme_dark">Oscuro</string>
-    <string name="settings_default_reminder">Recordatorio por defecto (minutos)</string>
-    <string name="settings_save">Guardar ajustes</string>
-    <string name="about">Acerca de</string>
-    <string name="about_version">Versión</string>
-    <string name="about_license">Licencia MIT</string>
+    <string name="review_event">Revisar Evento</string>
+    <string name="title_label">Título</string>
+    <string name="date_label">Fecha</string>
+    <string name="time_label">Hora</string>
+    <string name="duration_label">Duración (minutos)</string>
+    <string name="location_label">Ubicación</string>
+    <string name="category_label">Categoría</string>
+    <string name="priority_label">Prioridad</string>
+    <string name="reminders_label">Recordatorios</string>
 </resources>
-
