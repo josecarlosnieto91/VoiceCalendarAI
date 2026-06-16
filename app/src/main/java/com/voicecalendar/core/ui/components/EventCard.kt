@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.voicecalendar.core.util.DateUtils
 import com.voicecalendar.domain.model.CalendarEvent
+import com.voicecalendar.domain.model.EventCategory
 
 @Composable
 fun EventCard(
@@ -28,19 +29,42 @@ fun EventCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = event.title, style = MaterialTheme.typography.titleMedium,
-                maxLines = 1, overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = event.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
+                )
+                if (event.category != EventCategory.OTHER) {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    SuggestionChip(
+                        onClick = {},
+                        label = {
+                            Text(event.category.displayName, style = MaterialTheme.typography.labelSmall)
+                        }
+                    )
+                }
+            }
+
             if (event.description.isNotBlank()) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = event.description, style = MaterialTheme.typography.bodySmall,
+                    text = event.description,
+                    style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2, overflow = TextOverflow.Ellipsis
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
+
             Spacer(modifier = Modifier.height(8.dp))
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (event.date != null || event.startTime != null) {
                     InfoChip(
@@ -48,6 +72,9 @@ fun EventCard(
                         text = buildString {
                             event.date?.let { append(DateUtils.formatDate(it)) }
                             event.startTime?.let { append(" "); append(DateUtils.formatTime(it)) }
+                            if (event.durationMinutes != 60) {
+                                append(" · ${event.durationMinutes}min")
+                            }
                         }
                     )
                 }
