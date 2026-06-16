@@ -1,0 +1,17 @@
+{
+  "categories": [
+    {"title": "🚀 Features", "labels": ["feat"]},
+    {"title": "🐛 Bug Fixes", "labels": ["fix"]},
+    {"title": "📚 Documentation", "labels": ["docs"]},
+    {"title": "🎨 Style", "labels": ["style"]},
+    {"title": "♻️ Refactoring", "labels": ["refactor"]},
+    {"title": "⚡ Performance", "labels": ["perf"]},
+    {"title": "🧪 Tests", "labels": ["test"]},
+    {"title": "🏗️ Build System", "labels": ["build"]},
+    {"title": "🔧 CI", "labels": ["ci"]},
+    {"title": "📦 Chores", "labels": ["chore"]}
+  ],
+  "template": "${{CHANGELOG}}\n\n${{UNCATEGORIZED}}",
+  "pr_template": "- ${{TITLE}} (#${{NUMBER}})",
+  "empty": "- No changes"
+}
