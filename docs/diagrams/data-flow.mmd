@@ -1,0 +1,29 @@
+sequenceDiagram
+    actor User
+    participant UI as MainScreen
+    participant VM as MainViewModel
+    participant SR as SpeechRepository
+    participant LLM as LlmRepository
+    participant CR as CalendarRepository
+
+    User->>UI: Tap mic button
+    UI->>VM: onMicToggle()
+    VM->>SR: startListening()
+    SR-->>VM: Flow<VoiceInput>
+    VM-->>UI: isListening = true
+    
+    User->>SR: Speak: "Meeting tomorrow at 3pm"
+    SR-->>VM: VoiceInput(text, isFinal=true)
+    VM-->>UI: isProcessing = true
+    
+    VM->>LLM: extractEventFromText(text)
+    LLM-->>VM: CalendarEventJson
+    
+    VM->>VM: Map to CalendarEvent
+    VM-->>UI: showEditDialog = true
+    
+    User->>UI: Review & confirm
+    UI->>VM: onConfirmEvent(event)
+    VM->>CR: saveEvent(event)
+    CR-->>VM: Result.success
+    VM-->>UI: Success message + reload events

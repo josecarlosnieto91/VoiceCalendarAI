@@ -1,0 +1,53 @@
+graph TB
+    subgraph UI["Presentation Layer (Jetpack Compose)"]
+        MS[MainScreen]
+        MB[MicButton]
+        ED[EditableEventDialog]
+        VM[MainViewModel]
+    end
+
+    subgraph Domain["Domain Layer (Pure Kotlin)"]
+        UC1[ProcessVoiceInputUseCase]
+        UC2[SaveCalendarEventUseCase]
+        UC3[GetUpcomingEventsUseCase]
+        subgraph Repos["Repository Interfaces"]
+            SR[SpeechRepository]
+            CR[CalendarRepository]
+            LR[LlmRepository]
+            STR[SettingsRepository]
+        end
+        subgraph Models["Domain Models"]
+            CE[CalendarEvent]
+            VI[VoiceInput]
+            CEJ[CalendarEventJson]
+            AS[AppSettings]
+        end
+    end
+
+    subgraph Data["Data Layer (Android)"]
+        SRI[SpeechRepositoryImpl]
+        CRI[CalendarRepositoryImpl]
+        LRI[LlmRepositoryImpl]
+        STRI[SettingsRepositoryImpl]
+        DB[(Room DB)]
+        DS[(DataStore)]
+        API[LLM API / Retrofit]
+        CP[Calendar Provider]
+        SREC[SpeechRecognizer]
+    end
+
+    MS --> VM
+    MB --> VM
+    ED --> VM
+    VM --> UC1
+    VM --> UC2
+    VM --> UC3
+    UC1 --> LR
+    UC1 --> STR
+    UC2 --> CR
+    UC3 --> CR
+    LR --> LRI --> API
+    SR --> SRI --> SREC
+    CR --> CRI --> CP
+    STR --> STRI --> DS
+    CRI --> DB

@@ -1,0 +1,32 @@
+# Android
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# App build
+/app/build
+/app/release
+/app/debug
+
+# Room schemas
+/app/schemas
+
+# Keystore
+*.jks
+*.keystore
+*.keystore
+signing.properties
+
+# Misc
+*.log
+*.tmp
+*.swp
+*~
+.nfs*
