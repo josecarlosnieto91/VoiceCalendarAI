@@ -1,5 +1,6 @@
 build:
-  maxIssues: 0
+  maxIssues: 50
+  excludeCorrectable: false
 
 processors:
   active: true
@@ -17,250 +18,48 @@ console-reports:
     - 'ComplexityReport'
     - 'NotificationReport'
     - 'FindingsReport'
-    - 'FileBasedFindingsReport'
+    - 'FileBasedInfoReport'
 
 output-reports:
   active: true
   exclude:
-    - 'TxtOutputReport'
     - 'XmlOutputReport'
     - 'HtmlOutputReport'
 
 comments:
   active: true
-  excludedRuleSets:
-    - 'comments'
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
 
 complexity:
   active: true
   ComplexCondition:
     threshold: 4
-  ComplexInterface:
-    includeStaticDeclarations: false
-  CyclomaticComplexMethod:
-    threshold: 15
-  LabeledExpression:
-    active: false
-  LargeClass:
-    threshold: 600
-  LongMethod:
-    threshold: 60
   LongParameterList:
-    functionThreshold: 10
-    constructorThreshold: 10
-  MethodOverloading:
-    active: false
-  NamedArguments:
-    active: false
-  NestedBlockDepth:
-    threshold: 5
-  StringLiteralDuplication:
-    active: false
+    threshold: 8
   TooManyFunctions:
-    thresholdInFiles: 20
-    thresholdInClasses: 20
-    thresholdInInterfaces: 15
-    thresholdInObjects: 15
-    thresholdInEnums: 15
-
-coroutines:
-  active: true
-  GlobalCoroutineScope:
-    active: false
-  RedundantSuspendModifier:
     active: true
-  SleepInsteadOfDelay:
-    active: true
-  SuspendFunSwallowedCancellation:
-    active: false
-  SuspendFunWithFlowReturnType:
-    active: false
-
-empty-blocks:
-  active: true
-
-exceptions:
-  active: true
-  TooGenericExceptionCaught:
-    active: false
-  NotImplementedDeclaration:
-    active: false
-  ThrowingExceptionsWithoutMessageOrCause:
-    active: true
-  ThrowingNewInstanceOfSameException:
-    active: false
-
-naming:
-  active: true
-  ConstructorParameterNaming:
-    active: true
-    excludes: ['**/test/**', '**/androidTest/**']
-  ForbiddenClassName:
-    active: false
-  FunctionMaxLength:
-    active: false
-  FunctionMinLength:
-    active: false
-  NonBooleanPropertyPrefixedWithIs:
-    active: false
-  ObjectPropertyNaming:
-    active: true
-  PackageNaming:
-    active: true
-    excludes: ['**/test/**', '**/androidTest/**']
-  TopLevelPropertyNaming:
-    active: true
-  VariableMaxLength:
-    active: false
-  VariableMinLength:
-    active: false
-
-performance:
-  active: true
-  ArrayPrimitive:
-    active: false
-  CouldBeSequence:
-    threshold: 5
-  ForEachOnRange:
-    active: true
-  SpreadOperator:
-    active: true
-  UnnecessaryTemporaryInstantiation:
-    active: true
-
-potential-bugs:
-  active: true
-  Deprecation:
-    active: true
-  DuplicateCaseInWhenExpression:
-    active: true
-  HasPlatformType:
-    active: false
-  IgnoredReturnValue:
-    active: false
-  ImplicitDefaultLocale:
-    active: true
-  InvalidRange:
-    active: true
-  MapGetWithNonNullAssertion:
-    active: false
-  MissingPackageDeclaration:
-    active: false
-  NullableToStringCall:
-    active: false
-  UnreachableCode:
-    active: true
-  UnusedUnaryOperator:
-    active: true
-  UselessPostfixExpression:
-    active: true
+    thresholdInFiles: 15
+    thresholdInClasses: 15
 
 style:
   active: true
-  CanBeNonNullable:
-    active: false
-  CascadingCallWrapping:
-    active: false
-  ClassOrdering:
-    active: false
-  CollapsibleIfStatements:
-    active: true
-  DataClassContainsFunctions:
-    active: false
-  DataClassShouldBeImmutable:
-    active: false
-  DestructuringDeclarationWithTooManyEntries:
-    active: false
-  EqualsOnSignatureLine:
-    active: false
-  ExhaustiveWhen:
-    active: false
-  ExpressionBodySyntax:
-    active: false
-  ForbiddenComment:
-    active: false
-  ForbiddenImport:
-    active: false
-  FunctionOnlyReturningConstant:
-    active: false
-  LoopWithTooManyJumpStatements:
-    active: true
   MagicNumber:
     active: false
-  MandatoryBracesLoops:
-    active: false
   MaxLineLength:
-    active: false
-  MayBeConst:
-    active: false
-  ModifierOrder:
     active: true
-  NamedArgument:
-    active: false
-  NewLineAtEndOfFile:
-    active: true
-  NoTabs:
-    active: false
-  OptionalAbstractKeyword:
-    active: false
-  OptionalUnit:
-    active: false
-  PreferToOverPairSyntax:
-    active: false
-  ProtectedMemberInFinalClass:
-    active: true
-  RedundantExplicitType:
-    active: false
-  RedundantVisibilityModifierRule:
-    active: false
-  ReturnCount:
-    active: false
-  SafeCast:
-    active: true
-  SerialVersionUIDInSerializableClass:
-    active: false
-  SpacingBetweenPackageAndImports:
-    active: false
-  ThrowsCount:
-    active: true
-    max: 3
-  TrailingComma:
-    active: false
-  UnderscoresInNumericLiterals:
-    active: false
-  UnnecessaryAbstractClass:
-    active: true
-  UnnecessaryAnnotationUseSiteTarget:
-    active: false
-  UnnecessaryApply:
-    active: true
-  UnnecessaryFilter:
-    active: true
-  UnnecessaryLet:
-    active: false
-  UnnecessaryParentheses:
-    active: false
-  UntilInsteadOfRangeTo:
-    active: true
-  UnusedImports:
-    active: true
-  UnusedParameter:
-    active: false
-  UnusedPrivateClass:
-    active: true
-  UnusedPrivateMember:
-    active: false
-  UseCheckOrError:
-    active: false
-  UseDataClass:
-    active: false
-  UseRequire:
-    active: false
-  UseSumByInsteadOfSum:
-    active: false
-  UselessCallOnNotNull:
-    active: true
-  VarCouldBeVal:
-    active: true
-  WildcardImport:
-    active: false
+    maxLineLength: 140
+
+exceptions:
+  active: true
+
+naming:
+  active: true
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true

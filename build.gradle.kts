@@ -6,21 +6,21 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.ksp) apply false
-    alias(libs.plugins.ktlint) apply false
-    alias(libs.plugins.detekt) apply false
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
 }
 
 subprojects {
-    apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+    plugins.apply(rootProject.libs.plugins.ktlint.get().pluginId)
+    plugins.apply(rootProject.libs.plugins.detekt.get().pluginId)
+}
 
-    detekt {
-        config.setFrom(files("$rootDir/detekt.yml"))
-        buildUponDefaultConfig = true
-        allRules = false
-    }
+detekt {
+    config.setFrom(files("${rootDir}/detekt.yml"))
+    buildUponDefaultConfig = true
+    allRules = false
+}
 
-    ktlint {
-        version.set("1.3.0")
-    }
+ktlint {
+    version.set("1.3.0")
 }

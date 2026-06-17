@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.serialization)
+    kotlin("jvm")
+    kotlin("plugin.serialization")
 }
 
 java {
@@ -8,18 +8,13 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
-kotlin {
-    jvmToolchain(17)
-}
-
 dependencies {
-    // Coroutines
-    implementation(libs.coroutines.core)
+    // javax.inject for @Inject in use cases (pure Java standard, no Android dep)
+    implementation("javax.inject:javax.inject:1")
 
-    // Serialization (LLM JSON schema)
+    implementation(libs.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
 
-    // Testing
     testImplementation(libs.junit)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)

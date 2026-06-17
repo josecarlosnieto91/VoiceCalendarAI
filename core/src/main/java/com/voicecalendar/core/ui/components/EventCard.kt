@@ -127,15 +127,18 @@ fun EventCard(
 
             // Info row: date/time, relative time, location
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (event.date != null) {
+                val eDate = event.date
+                val eStart = event.startTime
+                if (eDate != null) {
                     InfoChip(
                         icon = Icons.Outlined.CalendarMonth,
-                        text = "${DateUtils.formatShortDate(event.date)} - ${DateUtils.getRelativeTimeString(event.date)}"
+                        text = DateUtils.formatShortDate(eDate)
                     )
-                } else if (event.startTime != null) {
+                }
+                if (eStart != null) {
                     InfoChip(
                         icon = Icons.Outlined.Schedule,
-                        text = DateUtils.formatTime(event.startTime)
+                        text = DateUtils.formatTime(eStart)
                     )
                 }
                 if (event.location.isNotBlank()) {

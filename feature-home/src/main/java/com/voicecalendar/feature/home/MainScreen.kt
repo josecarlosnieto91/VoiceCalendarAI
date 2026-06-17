@@ -1,5 +1,6 @@
 package com.voicecalendar.feature.home
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
