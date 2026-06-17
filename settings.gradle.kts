@@ -22,5 +22,13 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "VoiceCalendarAI"
-include(":app")
 
+include(":app")
+include(":core")
+include(":domain")
+include(":data")
+include(":feature-home")
+include(":feature-calendar")
+include(":feature-settings")
+include(":feature-ai")
+include(":feature-voice")
